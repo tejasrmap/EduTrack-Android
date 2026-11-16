@@ -1,0 +1,17 @@
+*.iml
+.gradle
+/local.properties
+.idea/
+.DS_Store
+/build
+build/
+app/build/
+.cxx
+local.properties
+.kotlin/
+~$*
+
+# Large binaries (build outputs)
+*.apk
+*.aab
+*.zip

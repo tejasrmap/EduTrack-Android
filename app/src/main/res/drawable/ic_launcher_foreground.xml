@@ -1,0 +1,52 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer Progress Ring Accent -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF06B6D4"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:pathData="M54,23 A31,31 0 1,1 25.5,66" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF8B5CF6"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:pathData="M25.5,42 A31,31 0 0,1 54,23" />
+
+    <!-- Graduation Cap Top Diamond -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,33 L76,44 L54,55 L32,44 Z" />
+
+    <!-- Graduation Cap Base / Mortarboard Band -->
+    <path
+        android:fillColor="#FF6366F1"
+        android:pathData="M40,49.5 L54,56.5 L68,49.5 L68,60 C68,64.5 61.5,68 54,68 C46.5,68 40,64.5 40,60 Z" />
+
+    <!-- Tassel Cord & Gold Drop -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFF59E0B"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round"
+        android:pathData="M73,45.5 L73,58" />
+    <path
+        android:fillColor="#FFF59E0B"
+        android:pathData="M73,60m-2.8,0a2.8,2.8 0,1 1,5.6 0a2.8,2.8 0,1 1,-5.6 0" />
+
+    <!-- Checkmark Badge Pill at Bottom -->
+    <path
+        android:fillColor="#FF10B981"
+        android:pathData="M54,74m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.0"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M51.2,74 L53.2,76 L57,72" />
+</vector>
