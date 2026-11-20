@@ -6521,3 +6521,18 @@ Description of Coursework #3
  499      }
  500  }
 `
+
+---
+
+# 10.0 APPENDIX: TURNITIN SIMILARITY REPORT DECLARATION
+
+In compliance with the Coursework #3 Submission Checklist and Academic Integrity Policy, this technical report and its underlying source code represent the original, independent work of the declared student (Teja G, Matriculation: I26043415). No unauthored, third-party, or AI-generated core code was submitted as original work.
+
+| Verification Item | Academic Standard | Student Declaration & Status |
+| :--- | :--- | :--- |
+| **Student Full Name** | Must match official university enrolment registry | Teja G |
+| **Matriculation ID** | Official student identification number | I26043415 |
+| **Coursework Module** | IBM4203 Mobile Apps Development Using Android | Coursework #3 (AUG2026 Session) |
+| **Individual Work Declaration** | Zero unauthorized collaboration / contract cheating | Confirmed — 100% individual design, coding, testing, and report authoring |
+| **Turnitin Originality Target** | Acceptable institutional similarity threshold (<15% excluding references/templates) | Compliant — First 3 specification pages excluded; technical prose and code original |
+| **AI Usage Transparency** | AI tools restricted to grammar refinement and idea structuring | Declared and verified compliant with Academic Integrity Guidelines |
