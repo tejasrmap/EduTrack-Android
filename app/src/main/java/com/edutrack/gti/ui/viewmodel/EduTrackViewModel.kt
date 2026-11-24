@@ -571,14 +571,16 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
         if (!isValid) return
 
         viewModelScope.launch {
-            val computedXp = (durationVal!! * 0.8).toInt() + 20
-            val selectedSubject = subjects.value.find { it.id == state.selectedSubjectId }
+            val selectedSubjectId = state.selectedSubjectId ?: return@launch
+            val duration = durationVal ?: return@launch
+            val computedXp = (duration * 0.8).toInt() + 20
+            val selectedSubject = subjects.value.find { it.id == selectedSubjectId }
             val resolvedTopic = state.topicText.trim().ifBlank { selectedSubject?.nextTopic ?: "Core Study" }
 
             val session = StudySession(
                 id = state.id,
-                subjectId = state.selectedSubjectId!!,
-                durationMinutes = durationVal,
+                subjectId = selectedSubjectId,
+                durationMinutes = duration,
                 date = state.dateText.trim(),
                 notes = state.notesText.trim(),
                 rating = state.rating,
@@ -608,7 +610,13 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
         notes: String,
         onSuccess: () -> Unit
     ) {
-        val validSubjectId = if (subjectId > 0) subjectId else subjects.value.firstOrNull()?.id ?: return
+        val validSubjectId = if (subjectId > 0) subjectId else subjects.value.firstOrNull()?.id
+        if (validSubjectId == null) {
+            viewModelScope.launch {
+                _snackbarEvent.emit("Please create a subject before saving sessions.")
+            }
+            return
+        }
         val safeMinutes = durationMinutes.coerceIn(1, 1440)
         val xpReward = (safeMinutes * 0.8).toInt() + 20
         val resolvedTopic = topicName.trim().ifBlank { "Focused Timer Session" }
@@ -708,11 +716,12 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
         if (!isValid) return
 
         viewModelScope.launch {
+            val goal = goalVal ?: return@launch
             val subject = Subject(
                 id = state.id,
                 name = state.nameText.trim(),
                 colorHex = state.colorHex,
-                weeklyGoalHours = goalVal!!,
+                weeklyGoalHours = goal,
                 description = state.descriptionText.trim(),
                 nextTopic = state.nextTopic,
                 topicsJson = state.topicsJson,

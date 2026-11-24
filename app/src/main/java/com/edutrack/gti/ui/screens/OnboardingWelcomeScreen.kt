@@ -141,7 +141,7 @@ fun OnboardingWelcomeScreen(
                         placeholder = { Text("e.g. Teja G") },
                         leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = ElectricIndigo) },
                         isError = nameError != null,
-                        supportingText = if (nameError != null) { { Text(nameError!!, color = MaterialTheme.colorScheme.error) } } else null,
+                        supportingText = nameError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
                         shape = RoundedCornerShape(14.dp),
                         singleLine = true
                     )
@@ -158,7 +158,7 @@ fun OnboardingWelcomeScreen(
                         placeholder = { Text("e.g. I26043415") },
                         leadingIcon = { Icon(Icons.Default.Badge, contentDescription = null, tint = NeonCyan) },
                         isError = idError != null,
-                        supportingText = if (idError != null) { { Text(idError!!, color = MaterialTheme.colorScheme.error) } } else null,
+                        supportingText = idError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } },
                         shape = RoundedCornerShape(14.dp),
                         singleLine = true
                     )

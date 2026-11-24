@@ -178,9 +178,9 @@ fun SubjectManagerScreen(
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
                         )
-                        if (subjectFormState.nameError != null) {
+                        subjectFormState.nameError?.let { err ->
                             Text(
-                                text = subjectFormState.nameError!!,
+                                text = err,
                                 color = MaterialTheme.colorScheme.error,
                                 style = MaterialTheme.typography.bodySmall
                             )
@@ -197,9 +197,9 @@ fun SubjectManagerScreen(
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
                         )
-                        if (subjectFormState.goalHoursError != null) {
+                        subjectFormState.goalHoursError?.let { err ->
                             Text(
-                                text = subjectFormState.goalHoursError!!,
+                                text = err,
                                 color = MaterialTheme.colorScheme.error,
                                 style = MaterialTheme.typography.bodySmall
                             )
@@ -288,7 +288,9 @@ fun SubjectManagerScreen(
                 confirmButton = {
                     Button(
                         onClick = {
-                            viewModel.deleteSubject(subjectToDelete!!)
+                            subjectToDelete?.let { sub ->
+                                viewModel.deleteSubject(sub)
+                            }
                             subjectToDelete = null
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = CrimsonRose),

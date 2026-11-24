@@ -122,7 +122,7 @@ fun AddEditSessionScreen(
                                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = subjectDropdownExpanded)
                                 },
                                 modifier = Modifier
-                                    .menuAnchor()
+                                    .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled = true)
                                     .fillMaxWidth(),
                                 shape = RoundedCornerShape(14.dp),
                                 singleLine = true
@@ -161,10 +161,10 @@ fun AddEditSessionScreen(
                         }
                     }
 
-                    if (formState.subjectError != null) {
+                    formState.subjectError?.let { subErr ->
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = formState.subjectError!!,
+                            text = subErr,
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -217,10 +217,10 @@ fun AddEditSessionScreen(
                         shape = RoundedCornerShape(14.dp),
                         singleLine = true
                     )
-                    if (formState.durationError != null) {
+                    formState.durationError?.let { durErr ->
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = formState.durationError!!,
+                            text = durErr,
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -291,10 +291,10 @@ fun AddEditSessionScreen(
                         shape = RoundedCornerShape(14.dp),
                         singleLine = true
                     )
-                    if (formState.dateError != null) {
+                    formState.dateError?.let { dtErr ->
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = formState.dateError!!,
+                            text = dtErr,
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )

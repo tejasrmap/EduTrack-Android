@@ -44,8 +44,9 @@ fun SubjectDetailScreen(
 
     val weeklyMinutes = weeklyMinutesBySubject[subjectId] ?: 0
     val weeklyHours = Math.round((weeklyMinutes / 60.0) * 10) / 10.0
-    val progressPercent = if ((subject?.weeklyGoalHours ?: 0.0) > 0) {
-        ((weeklyHours / subject!!.weeklyGoalHours) * 100).coerceIn(0.0, 100.0).toInt()
+    val goalHours = subject?.weeklyGoalHours ?: 0.0
+    val progressPercent = if (goalHours > 0) {
+        ((weeklyHours / goalHours) * 100).coerceIn(0.0, 100.0).toInt()
     } else 0
 
     Scaffold(

@@ -1,6 +1,7 @@
 package com.edutrack.gti.ui.screens
 
 import android.util.Patterns
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,6 +46,11 @@ fun SignUpScreen(
 ) {
     val focusManager = LocalFocusManager.current
     var currentStep by remember { mutableStateOf(1) } // 1: Account, 2: Academic, 3: Goals
+
+    // Handle system back gesture
+    BackHandler(enabled = currentStep > 1) {
+        currentStep -= 1
+    }
 
     // Step 1: Account Credentials
     var name by remember { mutableStateOf("Teja G") }
@@ -164,7 +170,31 @@ fun SignUpScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Top Navigation Bar (Header Back)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = {
+                        if (currentStep > 1) {
+                            currentStep -= 1
+                        } else {
+                            onNavigateToLogin()
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             // App Brand Logo Crest
             Box(

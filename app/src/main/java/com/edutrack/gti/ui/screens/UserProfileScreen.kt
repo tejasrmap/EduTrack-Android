@@ -360,7 +360,8 @@ fun UserProfileScreen(
                                     idError = "Student ID is required"
                                     return@Button
                                 }
-                                val hours = editWeeklyHours.toDoubleOrNull() ?: targetWeeklyHours
+                                val parsedHours = editWeeklyHours.toDoubleOrNull() ?: targetWeeklyHours
+                                val hours = parsedHours.coerceIn(1.0, 168.0)
                                 viewModel.updateUserProfile(
                                     name = editName,
                                     email = editEmail,

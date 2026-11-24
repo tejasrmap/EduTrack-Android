@@ -266,7 +266,38 @@ fun HomeScreen(
                 }
             }
 
-            items(subjects, key = { it.id }) { subject ->
+            if (subjects.isEmpty()) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MidnightBorder.copy(alpha = 0.8f), RoundedCornerShape(20.dp)),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = MidnightSurface)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "No subjects added yet",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "Tap 'Manage' above to add your courses and start tracking!",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            } else {
+                items(subjects, key = { it.id }) { subject ->
                 val subjectWeeklyMinutes = weeklyMinutesBySubject[subject.id] ?: 0
                 val subjectWeeklyHours = Math.round((subjectWeeklyMinutes / 60.0) * 10) / 10.0
                 val recentSubSession = sessions.firstOrNull { it.session.subjectId == subject.id }?.session
@@ -382,6 +413,7 @@ fun HomeScreen(
                         }
                     }
                 }
+            }
             }
 
             // 5. RECENT STUDY ACTIVITY (Tap to open Session Detail)
