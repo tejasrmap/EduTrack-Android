@@ -9,6 +9,7 @@ import com.edutrack.gti.data.local.StudySession
 import com.edutrack.gti.data.local.StudySessionWithSubject
 import com.edutrack.gti.data.local.Subject
 import com.edutrack.gti.data.repository.EduTrackRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -747,9 +748,9 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun <T> Flow<T>.asStateFlow(initialValue: T): StateFlow<T> {
-        return this.stateIn(
+        return this.flowOn(Dispatchers.Default).stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.WhileSubscribed(5000),
             initialValue = initialValue
         )
     }

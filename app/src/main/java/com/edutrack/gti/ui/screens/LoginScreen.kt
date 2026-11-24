@@ -97,6 +97,7 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkAuroraBg)
+            .statusBarsPadding()
             .imePadding()
     ) {
         Column(

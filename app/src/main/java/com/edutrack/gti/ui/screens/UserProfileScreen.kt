@@ -45,12 +45,12 @@ fun UserProfileScreen(
     val sessionItems by viewModel.sessionsWithSubject.collectAsState()
 
     var isEditing by remember { mutableStateOf(false) }
-    var editName by remember { mutableStateOf(userName) }
-    var editEmail by remember { mutableStateOf(userEmail) }
-    var editStudentId by remember { mutableStateOf(studentId) }
-    var editMajor by remember { mutableStateOf(primaryMajor) }
-    var editSemester by remember { mutableStateOf(currentSemester) }
-    var editWeeklyHours by remember { mutableStateOf(String.format(Locale.US, "%.0f", targetWeeklyHours)) }
+    var editName by remember(userName) { mutableStateOf(userName) }
+    var editEmail by remember(userEmail) { mutableStateOf(userEmail) }
+    var editStudentId by remember(studentId) { mutableStateOf(studentId) }
+    var editMajor by remember(primaryMajor) { mutableStateOf(primaryMajor) }
+    var editSemester by remember(currentSemester) { mutableStateOf(currentSemester) }
+    var editWeeklyHours by remember(targetWeeklyHours) { mutableStateOf(String.format(Locale.US, "%.0f", targetWeeklyHours)) }
 
     var nameError by remember { mutableStateOf<String?>(null) }
     var idError by remember { mutableStateOf<String?>(null) }

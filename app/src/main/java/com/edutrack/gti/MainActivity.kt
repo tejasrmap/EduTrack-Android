@@ -90,7 +90,24 @@ fun EduTrackMainApp(viewModel: EduTrackViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = DarkAuroraBg,
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = if (isBottomBarVisible) 84.dp else 16.dp)
+            ) { snackbarData ->
+                Snackbar(
+                    snackbarData = snackbarData,
+                    containerColor = MidnightSurface,
+                    contentColor = Color.White,
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .border(1.dp, MidnightBorder, RoundedCornerShape(14.dp))
+                )
+            }
+        }
     ) { innerPadding ->
         Box(
             modifier = Modifier

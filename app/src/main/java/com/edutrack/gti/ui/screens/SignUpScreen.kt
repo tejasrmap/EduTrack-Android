@@ -161,6 +161,7 @@ fun SignUpScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkAuroraBg)
+            .statusBarsPadding()
             .imePadding()
     ) {
         Column(
@@ -444,6 +445,7 @@ fun SignUpScreen(
                             value = major,
                             onValueChange = { major = it },
                             label = { Text("Academic Major / Degree") },
+                            textStyle = LocalTextStyle.current.copy(fontSize = 13.5.sp),
                             leadingIcon = { Icon(Icons.Default.School, contentDescription = null, tint = EmeraldGreen) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = {
@@ -702,15 +704,31 @@ fun SignUpScreen(
                             OutlinedButton(
                                 onClick = { currentStep -= 1 },
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .height(50.dp),
+                                    .weight(0.85f)
+                                    .height(48.dp),
                                 shape = RoundedCornerShape(14.dp),
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
                                 border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder),
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
                             ) {
-                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp))
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text("Back", fontWeight = FontWeight.Bold)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "Back",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.sp,
+                                        maxLines = 1,
+                                        softWrap = false
+                                    )
+                                }
                             }
                         }
 
@@ -735,8 +753,9 @@ fun SignUpScreen(
                                 }
                             },
                             modifier = Modifier
-                                .weight(if (currentStep > 1) 2f else 1f)
-                                .height(50.dp),
+                                .weight(if (currentStep > 1) 1.85f else 1f)
+                                .height(48.dp),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
                             shape = RoundedCornerShape(14.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = if (currentStep == 3) EmeraldGreen else ElectricIndigo
@@ -753,8 +772,10 @@ fun SignUpScreen(
                                         else -> "🎉 Launch EduTrack"
                                     },
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
-                                    color = Color.White
+                                    fontSize = 13.sp,
+                                    color = Color.White,
+                                    maxLines = 1,
+                                    softWrap = false
                                 )
                             }
                         }
