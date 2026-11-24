@@ -15,12 +15,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -95,6 +97,7 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkAuroraBg)
+            .imePadding()
     ) {
         Column(
             modifier = Modifier
@@ -104,7 +107,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
             // App Brand Logo Crest
             Box(
@@ -225,6 +228,9 @@ fun LoginScreen(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        ),
                         singleLine = true,
                         shape = RoundedCornerShape(14.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -337,7 +343,7 @@ fun LoginScreen(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Icon(
-                                    Icons.Default.ArrowForward,
+                                    Icons.AutoMirrored.Filled.ArrowForward,
                                     contentDescription = null,
                                     tint = Color.White,
                                     modifier = Modifier.size(18.dp)
@@ -376,7 +382,11 @@ fun LoginScreen(
 
             // Navigation to Sign Up
             Row(
-                modifier = Modifier.padding(bottom = 32.dp),
+                modifier = Modifier
+                    .padding(bottom = 36.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onNavigateToSignUp() }
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -390,8 +400,7 @@ fun LoginScreen(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.ExtraBold,
                         color = ElectricIndigo
-                    ),
-                    modifier = Modifier.clickable { onNavigateToSignUp() }
+                    )
                 )
             }
         }

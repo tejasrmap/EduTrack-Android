@@ -2,6 +2,7 @@ package com.edutrack.gti.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -9,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -36,6 +38,7 @@ fun UserProfileScreen(
     val studentId by viewModel.studentId.collectAsState()
     val primaryMajor by viewModel.primaryMajor.collectAsState()
     val userEmail by viewModel.userEmail.collectAsState()
+    val currentSemester by viewModel.currentSemester.collectAsState()
     val targetWeeklyHours by viewModel.targetWeeklyHours.collectAsState()
     val stats by viewModel.dashboardStats.collectAsState()
     val subjects by viewModel.subjects.collectAsState()
@@ -43,8 +46,10 @@ fun UserProfileScreen(
 
     var isEditing by remember { mutableStateOf(false) }
     var editName by remember { mutableStateOf(userName) }
+    var editEmail by remember { mutableStateOf(userEmail) }
     var editStudentId by remember { mutableStateOf(studentId) }
     var editMajor by remember { mutableStateOf(primaryMajor) }
+    var editSemester by remember { mutableStateOf(currentSemester) }
     var editWeeklyHours by remember { mutableStateOf(String.format(Locale.US, "%.0f", targetWeeklyHours)) }
 
     var nameError by remember { mutableStateOf<String?>(null) }
@@ -89,8 +94,10 @@ fun UserProfileScreen(
                         FilledTonalButton(
                             onClick = {
                                 editName = userName
+                                editEmail = userEmail
                                 editStudentId = studentId
                                 editMajor = primaryMajor
+                                editSemester = currentSemester
                                 editWeeklyHours = String.format(Locale.US, "%.0f", targetWeeklyHours)
                                 isEditing = true
                             },
@@ -256,6 +263,17 @@ fun UserProfileScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
 
+                        // Account Email
+                        OutlinedTextField(
+                            value = editEmail,
+                            onValueChange = { editEmail = it },
+                            label = { Text("Account Email") },
+                            leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = RadiantViolet) },
+                            singleLine = true,
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
                         // Student ID
                         OutlinedTextField(
                             value = editStudentId,
@@ -283,6 +301,42 @@ fun UserProfileScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
 
+                        // Academic Semester Selector
+                        Text(
+                            text = "Current Academic Semester:",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.White.copy(alpha = 0.7f)
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            listOf(1, 2, 3, 4, 5, 6).forEach { sem ->
+                                val isSelected = editSemester == sem
+                                Surface(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .clickable { editSemester = sem }
+                                        .border(
+                                            1.dp,
+                                            if (isSelected) ElectricIndigo else MidnightBorder,
+                                            RoundedCornerShape(10.dp)
+                                        ),
+                                    color = if (isSelected) ElectricIndigo.copy(alpha = 0.25f) else Color.Transparent
+                                ) {
+                                    Text(
+                                        text = "S$sem",
+                                        modifier = Modifier.padding(vertical = 10.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
+                                        color = if (isSelected) Color.White else Color.White.copy(alpha = 0.6f),
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+                        }
+
                         // Weekly Target Hours
                         OutlinedTextField(
                             value = editWeeklyHours,
@@ -309,9 +363,11 @@ fun UserProfileScreen(
                                 val hours = editWeeklyHours.toDoubleOrNull() ?: targetWeeklyHours
                                 viewModel.updateUserProfile(
                                     name = editName,
+                                    email = editEmail,
                                     id = editStudentId,
                                     major = editMajor,
-                                    weeklyGoalHours = hours
+                                    weeklyGoalHours = hours,
+                                    semester = editSemester
                                 )
                                 isEditing = false
                             },
@@ -371,6 +427,15 @@ fun UserProfileScreen(
                             label = "Programme / Major",
                             value = primaryMajor,
                             tint = NeonCyan
+                        )
+
+                        HorizontalDivider(color = MidnightBorder.copy(alpha = 0.5f))
+
+                        ProfileInfoRow(
+                            icon = Icons.Default.CalendarMonth,
+                            label = "Academic Standing",
+                            value = "Semester $currentSemester",
+                            tint = AmberGold
                         )
 
                         HorizontalDivider(color = MidnightBorder.copy(alpha = 0.5f))
@@ -445,7 +510,7 @@ fun UserProfileScreen(
                 ),
                 border = androidx.compose.foundation.BorderStroke(1.dp, RadicalCoral.copy(alpha = 0.5f))
             ) {
-                Icon(Icons.Default.Logout, contentDescription = null, tint = RadicalCoral)
+                Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = RadicalCoral)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Log Out of Student Account", fontWeight = FontWeight.Bold, fontSize = 14.sp)
             }

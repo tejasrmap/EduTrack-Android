@@ -10,15 +10,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -151,6 +155,7 @@ fun SignUpScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkAuroraBg)
+            .imePadding()
     ) {
         Column(
             modifier = Modifier
@@ -295,6 +300,8 @@ fun SignUpScreen(
                             leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = ElectricIndigo) },
                             isError = nameError != null,
                             supportingText = { nameError?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
+                            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                             singleLine = true,
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -313,6 +320,7 @@ fun SignUpScreen(
                             isError = emailError != null,
                             supportingText = { emailError?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+                            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                             singleLine = true,
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -340,6 +348,7 @@ fun SignUpScreen(
                             isError = passwordError != null,
                             supportingText = { passwordError?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+                            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                             singleLine = true,
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -358,6 +367,10 @@ fun SignUpScreen(
                             isError = confirmError != null,
                             supportingText = { confirmError?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                                if (validateStep1()) currentStep = 2
+                            }),
                             singleLine = true,
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -389,6 +402,8 @@ fun SignUpScreen(
                             leadingIcon = { Icon(Icons.Default.Badge, contentDescription = null, tint = ElectricIndigo) },
                             isError = studentIdError != null,
                             supportingText = { studentIdError?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
+                            keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                             singleLine = true,
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -400,6 +415,11 @@ fun SignUpScreen(
                             onValueChange = { major = it },
                             label = { Text("Academic Major / Degree") },
                             leadingIcon = { Icon(Icons.Default.School, contentDescription = null, tint = EmeraldGreen) },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                                if (validateStep2()) currentStep = 3
+                            }),
                             singleLine = true,
                             shape = RoundedCornerShape(14.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -658,7 +678,7 @@ fun SignUpScreen(
                                 border = androidx.compose.foundation.BorderStroke(1.dp, MidnightBorder),
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
                             ) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp))
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text("Back", fontWeight = FontWeight.Bold)
                             }
@@ -716,7 +736,11 @@ fun SignUpScreen(
 
             // Footer link to Login
             Row(
-                modifier = Modifier.padding(bottom = 32.dp),
+                modifier = Modifier
+                    .padding(bottom = 36.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onNavigateToLogin() }
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -730,8 +754,7 @@ fun SignUpScreen(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.ExtraBold,
                         color = ElectricIndigo
-                    ),
-                    modifier = Modifier.clickable { onNavigateToLogin() }
+                    )
                 )
             }
         }

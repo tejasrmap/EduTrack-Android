@@ -225,26 +225,33 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
 
     fun updateUserProfile(
         name: String,
+        email: String = _userEmail.value,
         id: String,
         major: String,
-        weeklyGoalHours: Double
+        weeklyGoalHours: Double,
+        semester: Int = _currentSemester.value
     ) {
         val trimmedName = name.trim().ifEmpty { "Teja G" }
+        val trimmedEmail = email.trim().ifEmpty { "teja.g@student.edu" }
         val trimmedId = id.trim().ifEmpty { "I26043415" }
         val trimmedMajor = major.trim().ifEmpty { "Mobile Apps & Software Eng" }
         val validHours = if (weeklyGoalHours > 0) weeklyGoalHours else 26.0
 
         prefs.edit()
             .putString("user_name", trimmedName)
+            .putString("user_email", trimmedEmail)
             .putString("student_id", trimmedId)
             .putString("primary_major", trimmedMajor)
             .putFloat("target_weekly_hours", validHours.toFloat())
+            .putInt("current_semester", semester)
             .apply()
 
         _userName.value = trimmedName
+        _userEmail.value = trimmedEmail
         _studentId.value = trimmedId
         _primaryMajor.value = trimmedMajor
         _targetWeeklyHours.value = validHours
+        _currentSemester.value = semester
 
         viewModelScope.launch {
             _snackbarEvent.emit("Profile updated successfully!")

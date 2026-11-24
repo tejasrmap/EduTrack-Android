@@ -9,7 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.School
@@ -36,6 +36,7 @@ fun StudyJourneyScreen(
     val subjects by viewModel.subjects.collectAsState()
     val stats by viewModel.dashboardStats.collectAsState()
     val totalMinutesBySubject by viewModel.totalMinutesBySubject.collectAsState()
+    val currentSemester by viewModel.currentSemester.collectAsState()
 
     val milestoneProgress = (stats.weeklyGoalProgressPercent / 100f).coerceIn(0f, 1f)
 
@@ -70,7 +71,7 @@ fun StudyJourneyScreen(
                     color = Color.White
                 )
                 Text(
-                    text = "Semester 3 Academic Milestones & Roadmaps",
+                    text = "Semester $currentSemester Academic Milestones & Roadmaps",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -96,7 +97,7 @@ fun StudyJourneyScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "SEMESTER 3 MILESTONE",
+                            text = "SEMESTER $currentSemester MILESTONE",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 letterSpacing = 1.sp,
                                 fontWeight = FontWeight.Bold
@@ -239,7 +240,7 @@ fun StudyJourneyScreen(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Icon(
-                            imageVector = Icons.Default.ArrowForward,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "View Subject Details",
                             tint = MaterialTheme.colorScheme.outline,
                             modifier = Modifier.size(14.dp)
@@ -269,12 +270,12 @@ fun StudyJourneyScreen(
                         Spacer(modifier = Modifier.width(14.dp))
                         Column {
                             Text(
-                                text = "Semester 4 (Upcoming)",
+                                text = "Semester ${currentSemester + 1} (Upcoming)",
                                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                                 color = MaterialTheme.colorScheme.outline
                             )
                             Text(
-                                text = "Unlocks upon completion of Semester 3 coursework",
+                                text = "Unlocks upon completion of Semester $currentSemester coursework",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.outline
                             )
