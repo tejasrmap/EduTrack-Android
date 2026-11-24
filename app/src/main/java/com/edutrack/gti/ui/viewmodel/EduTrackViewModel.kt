@@ -81,6 +81,16 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
     private val repository: EduTrackRepository
     private val prefs = application.getSharedPreferences("edutrack_user_prefs", Context.MODE_PRIVATE)
 
+    // Authentication & User Session State
+    private val _isLoggedIn = MutableStateFlow(prefs.getBoolean("is_logged_in", false))
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
+
+    private val _userEmail = MutableStateFlow(prefs.getString("user_email", "teja.g@student.edu") ?: "teja.g@student.edu")
+    val userEmail: StateFlow<String> = _userEmail.asStateFlow()
+
+    private val _currentSemester = MutableStateFlow(prefs.getInt("current_semester", 3))
+    val currentSemester: StateFlow<Int> = _currentSemester.asStateFlow()
+
     private val _isOnboardingCompleted = MutableStateFlow(prefs.getBoolean("is_onboarding_completed", false))
     val isOnboardingCompleted: StateFlow<Boolean> = _isOnboardingCompleted.asStateFlow()
 
@@ -125,6 +135,86 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun login(email: String, pass: String): Boolean {
+        val trimmedEmail = email.trim()
+        val trimmedPass = pass.trim()
+        val savedEmail = prefs.getString("user_email", "teja.g@student.edu") ?: "teja.g@student.edu"
+        val savedPass = prefs.getString("user_password", "Student123!") ?: "Student123!"
+
+        // Accept registered credentials, demo student account, or valid student format
+        val isDefaultStudent = (trimmedEmail.equals("teja.g@student.edu", ignoreCase = true) || 
+                                trimmedEmail.equals("student@edutrack.edu", ignoreCase = true)) && 
+                                (trimmedPass == "Student123!" || trimmedPass.isNotEmpty())
+        val isSavedAccount = trimmedEmail.equals(savedEmail, ignoreCase = true) && 
+                             (trimmedPass == savedPass || savedPass.isEmpty() || trimmedPass == "Student123!")
+
+        if (isDefaultStudent || isSavedAccount || (trimmedEmail.contains("@") && trimmedPass.length >= 6)) {
+            prefs.edit()
+                .putBoolean("is_logged_in", true)
+                .putString("user_email", trimmedEmail)
+                .apply()
+            _userEmail.value = trimmedEmail
+            _isLoggedIn.value = true
+            viewModelScope.launch {
+                _snackbarEvent.emit("Welcome back, ${_userName.value}!")
+            }
+            return true
+        }
+        return false
+    }
+
+    fun register(
+        name: String,
+        email: String,
+        pass: String,
+        studentId: String,
+        major: String,
+        weeklyHours: Double,
+        semester: Int
+    ) {
+        val trimmedName = name.trim().ifEmpty { "Teja G" }
+        val trimmedEmail = email.trim().ifEmpty { "teja.g@student.edu" }
+        val trimmedPass = pass.trim().ifEmpty { "Student123!" }
+        val trimmedId = studentId.trim().ifEmpty { "I26043415" }
+        val trimmedMajor = major.trim().ifEmpty { "Mobile Apps & Software Eng" }
+        val validHours = if (weeklyHours > 0) weeklyHours else 26.0
+
+        prefs.edit()
+            .putString("user_name", trimmedName)
+            .putString("user_email", trimmedEmail)
+            .putString("user_password", trimmedPass)
+            .putString("student_id", trimmedId)
+            .putString("primary_major", trimmedMajor)
+            .putFloat("target_weekly_hours", validHours.toFloat())
+            .putInt("current_semester", semester)
+            .putBoolean("is_logged_in", true)
+            .putBoolean("is_onboarding_completed", true)
+            .apply()
+
+        _userName.value = trimmedName
+        _userEmail.value = trimmedEmail
+        _studentId.value = trimmedId
+        _primaryMajor.value = trimmedMajor
+        _targetWeeklyHours.value = validHours
+        _currentSemester.value = semester
+        _isLoggedIn.value = true
+        _isOnboardingCompleted.value = true
+
+        viewModelScope.launch {
+            _snackbarEvent.emit("Account created! Welcome to EduTrack, $trimmedName!")
+        }
+    }
+
+    fun logout() {
+        prefs.edit()
+            .putBoolean("is_logged_in", false)
+            .apply()
+        _isLoggedIn.value = false
+        viewModelScope.launch {
+            _snackbarEvent.emit("Logged out successfully.")
+        }
+    }
+
     fun updateUserName(newName: String) {
         val trimmed = newName.trim()
         if (trimmed.isNotEmpty()) {
@@ -164,7 +254,6 @@ class EduTrackViewModel(application: Application) : AndroidViewModel(application
     init {
         val database = AppDatabase.getDatabase(application)
         repository = EduTrackRepository(database.subjectDao(), database.studySessionDao())
-
         viewModelScope.launch {
             AppDatabase.seedInitialDataIfEmpty(database)
         }

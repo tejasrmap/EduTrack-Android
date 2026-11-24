@@ -27,5 +27,9 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
 
     object Profile : Screen("user_profile", "Student Profile", Icons.Default.Person)
 
+    object Login : Screen("login", "Student Login")
+
+    object SignUp : Screen("signup", "Guided Sign Up")
+
     object WelcomeOnboarding : Screen("welcome_onboarding", "Welcome")
 }

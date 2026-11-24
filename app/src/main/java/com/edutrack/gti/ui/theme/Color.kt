@@ -24,6 +24,7 @@ val StreakOrange = Color(0xFFF97316)
 val AmberGold = Color(0xFFF59E0B)
 val GlowingAmber = AmberGold                   // Alias for backward compatibility
 val CrimsonRose = Color(0xFFEF4444)
+val RadicalCoral = Color(0xFFF43F5E)
 
 // Preset Subject Color Tag Hexes
 val PresetSubjectColors = listOf(

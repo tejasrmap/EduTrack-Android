@@ -63,6 +63,7 @@ fun EduTrackMainApp(viewModel: EduTrackViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     val isOnboardingCompleted by viewModel.isOnboardingCompleted.collectAsState()
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
     var isFabMenuExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -97,9 +98,37 @@ fun EduTrackMainApp(viewModel: EduTrackViewModel) {
             // Main Navigation Graph
             NavHost(
                 navController = navController,
-                startDestination = if (isOnboardingCompleted) Screen.Home.route else Screen.WelcomeOnboarding.route,
+                startDestination = if (isLoggedIn) Screen.Home.route else Screen.Login.route,
                 modifier = Modifier.fillMaxSize()
             ) {
+                composable(Screen.Login.route) {
+                    LoginScreen(
+                        viewModel = viewModel,
+                        onLoginSuccess = {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                            }
+                        },
+                        onNavigateToSignUp = {
+                            navController.navigate(Screen.SignUp.route)
+                        }
+                    )
+                }
+
+                composable(Screen.SignUp.route) {
+                    SignUpScreen(
+                        viewModel = viewModel,
+                        onSignUpSuccess = {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.Login.route) { inclusive = true }
+                            }
+                        },
+                        onNavigateToLogin = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+
                 composable(Screen.WelcomeOnboarding.route) {
                     OnboardingWelcomeScreen(
                         viewModel = viewModel,
@@ -223,7 +252,12 @@ fun EduTrackMainApp(viewModel: EduTrackViewModel) {
                 composable(Screen.Profile.route) {
                     UserProfileScreen(
                         viewModel = viewModel,
-                        onNavigateBack = { navController.popBackStack() }
+                        onNavigateBack = { navController.popBackStack() },
+                        onLogout = {
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
                     )
                 }
             }

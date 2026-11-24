@@ -29,11 +29,13 @@ import java.util.Locale
 @Composable
 fun UserProfileScreen(
     viewModel: EduTrackViewModel,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onLogout: () -> Unit = {}
 ) {
     val userName by viewModel.userName.collectAsState()
     val studentId by viewModel.studentId.collectAsState()
     val primaryMajor by viewModel.primaryMajor.collectAsState()
+    val userEmail by viewModel.userEmail.collectAsState()
     val targetWeeklyHours by viewModel.targetWeeklyHours.collectAsState()
     val stats by viewModel.dashboardStats.collectAsState()
     val subjects by viewModel.subjects.collectAsState()
@@ -347,6 +349,15 @@ fun UserProfileScreen(
                         )
 
                         ProfileInfoRow(
+                            icon = Icons.Default.Email,
+                            label = "Account Email",
+                            value = userEmail.ifBlank { "student@university.edu" },
+                            tint = RadiantViolet
+                        )
+
+                        HorizontalDivider(color = MidnightBorder.copy(alpha = 0.5f))
+
+                        ProfileInfoRow(
                             icon = Icons.Default.Badge,
                             label = "Student Matric ID",
                             value = studentId,
@@ -417,6 +428,26 @@ fun UserProfileScreen(
                         )
                     }
                 }
+            }
+
+            // Log Out Button
+            OutlinedButton(
+                onClick = {
+                    viewModel.logout()
+                    onLogout()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = RadicalCoral
+                ),
+                border = androidx.compose.foundation.BorderStroke(1.dp, RadicalCoral.copy(alpha = 0.5f))
+            ) {
+                Icon(Icons.Default.Logout, contentDescription = null, tint = RadicalCoral)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Log Out of Student Account", fontWeight = FontWeight.Bold, fontSize = 14.sp)
             }
 
             Spacer(modifier = Modifier.height(30.dp))

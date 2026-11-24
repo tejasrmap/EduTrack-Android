@@ -232,8 +232,11 @@ fun HomeScreen(
                             fontSize = 15.sp
                         ),
                         color = Color.White,
-                        modifier = Modifier.weight(1f)
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
                     )
+                    Spacer(modifier = Modifier.width(12.dp))
                     Surface(
                         modifier = Modifier.clickable { onNavigateToSubjectManager() },
                         shape = RoundedCornerShape(12.dp),
@@ -249,7 +252,8 @@ fun HomeScreen(
                                 text = "Manage",
                                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
                                 color = ElectricIndigo,
-                                softWrap = false
+                                softWrap = false,
+                                maxLines = 1
                             )
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
